@@ -1,0 +1,566 @@
+/*
+ * Material Design 3 system tokens + component styles.
+ * Spec references: https://m3.material.io/foundations , https://m3.material.io/components
+ * Color roles live in tokens.css (generated from the olive seed).
+ */
+
+/* ───────────────────────── Reference tokens ───────────────────────── */
+:root {
+  /* Typography — https://m3.material.io/styles/typography/type-scale-tokens */
+  /* Brand = display/headline/title-large, Plain = everything else (M3 baseline split). */
+  --md-ref-typeface-brand: var(--font-brand), 'Cormorant Garamond', Georgia, serif;
+  --md-ref-typeface-plain: var(--font-plain), 'Roboto', system-ui, sans-serif;
+  --md-ref-typeface-weight-brand: 500;
+
+  /* Shape — https://m3.material.io/styles/shape/corner-radius-scale */
+  --md-sys-shape-corner-none: 0;
+  --md-sys-shape-corner-extra-small: 4px;
+  --md-sys-shape-corner-small: 8px;
+  --md-sys-shape-corner-medium: 12px;
+  --md-sys-shape-corner-large: 16px;
+  --md-sys-shape-corner-extra-large: 28px;
+  --md-sys-shape-corner-full: 9999px;
+
+  /* Elevation — https://m3.material.io/styles/elevation/tokens */
+  --md-shadow-key: color-mix(in srgb, var(--md-sys-color-shadow) 30%, transparent);
+  --md-shadow-ambient: color-mix(in srgb, var(--md-sys-color-shadow) 15%, transparent);
+  --md-sys-elevation-level0: none;
+  --md-sys-elevation-level1: 0 1px 2px 0 var(--md-shadow-key), 0 1px 3px 1px var(--md-shadow-ambient);
+  --md-sys-elevation-level2: 0 1px 2px 0 var(--md-shadow-key), 0 2px 6px 2px var(--md-shadow-ambient);
+  --md-sys-elevation-level3: 0 1px 3px 0 var(--md-shadow-key), 0 4px 8px 3px var(--md-shadow-ambient);
+  --md-sys-elevation-level4: 0 2px 3px 0 var(--md-shadow-key), 0 6px 10px 4px var(--md-shadow-ambient);
+  --md-sys-elevation-level5: 0 4px 4px 0 var(--md-shadow-key), 0 8px 12px 6px var(--md-shadow-ambient);
+
+  /* State layers — https://m3.material.io/foundations/interaction/states/state-layers */
+  --md-sys-state-hover-opacity: 0.08;
+  --md-sys-state-focus-opacity: 0.1;
+  --md-sys-state-pressed-opacity: 0.1;
+  --md-sys-state-dragged-opacity: 0.16;
+
+  /* Motion — https://m3.material.io/styles/motion/easing-and-duration/tokens-specs */
+  --md-sys-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  --md-sys-motion-easing-emphasized: cubic-bezier(0.2, 0, 0, 1);
+  --md-sys-motion-easing-emphasized-decelerate: cubic-bezier(0.05, 0.7, 0.1, 1);
+  --md-sys-motion-easing-emphasized-accelerate: cubic-bezier(0.3, 0, 0.8, 0.15);
+  --md-sys-motion-duration-short2: 100ms;
+  --md-sys-motion-duration-short4: 200ms;
+  --md-sys-motion-duration-medium2: 300ms;
+  --md-sys-motion-duration-medium4: 400ms;
+  --md-sys-motion-duration-long2: 500ms;
+
+  /* Layout — window size classes: compact <600, medium 600–839, expanded 840–1199, large ≥1200 */
+  --md-layout-margin: 16px;
+  --md-layout-gutter: 16px;
+  --md-layout-max: 1280px;
+}
+
+@media (min-width: 600px) {
+  :root {
+    --md-layout-margin: 24px;
+    --md-layout-gutter: 24px;
+  }
+}
+
+/* ───────────────────────── Type scale ───────────────────────── */
+.md-display-large { font: var(--md-ref-typeface-weight-brand) 57px/64px var(--md-ref-typeface-brand); letter-spacing: -0.25px; }
+.md-display-medium { font: var(--md-ref-typeface-weight-brand) 45px/52px var(--md-ref-typeface-brand); letter-spacing: 0; }
+.md-display-small { font: var(--md-ref-typeface-weight-brand) 36px/44px var(--md-ref-typeface-brand); letter-spacing: 0; }
+.md-headline-large { font: var(--md-ref-typeface-weight-brand) 32px/40px var(--md-ref-typeface-brand); letter-spacing: 0; }
+.md-headline-medium { font: var(--md-ref-typeface-weight-brand) 28px/36px var(--md-ref-typeface-brand); letter-spacing: 0; }
+.md-headline-small { font: var(--md-ref-typeface-weight-brand) 24px/32px var(--md-ref-typeface-brand); letter-spacing: 0; }
+.md-title-large { font: 600 24px/28px var(--md-ref-typeface-brand); letter-spacing: 0; }
+.md-title-medium { font: 500 16px/24px var(--md-ref-typeface-plain); letter-spacing: 0.15px; }
+.md-title-small { font: 500 14px/20px var(--md-ref-typeface-plain); letter-spacing: 0.1px; }
+.md-body-large { font: 400 16px/24px var(--md-ref-typeface-plain); letter-spacing: 0.5px; }
+.md-body-medium { font: 400 14px/20px var(--md-ref-typeface-plain); letter-spacing: 0.25px; }
+.md-body-small { font: 400 12px/16px var(--md-ref-typeface-plain); letter-spacing: 0.4px; }
+.md-label-large { font: 500 14px/20px var(--md-ref-typeface-plain); letter-spacing: 0.1px; }
+.md-label-medium { font: 500 12px/16px var(--md-ref-typeface-plain); letter-spacing: 0.5px; }
+.md-label-small { font: 500 11px/16px var(--md-ref-typeface-plain); letter-spacing: 0.5px; }
+
+/* Utility: letter-spaced overline used for eyebrows (label-medium with extra tracking) */
+.md-overline { font: 500 12px/16px var(--md-ref-typeface-plain); letter-spacing: 0.24em; text-transform: uppercase; }
+
+/* Display sizes step down on compact windows */
+@media (max-width: 599px) {
+  .md-display-large { font-size: 45px; line-height: 52px; letter-spacing: 0; }
+  .md-display-medium { font-size: 36px; line-height: 44px; }
+}
+
+/* ───────────────────────── Base ───────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background: var(--md-sys-color-background);
+  color: var(--md-sys-color-on-background);
+  font: 400 16px/24px var(--md-ref-typeface-plain);
+  letter-spacing: 0.5px;
+  transition:
+    background-color var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard),
+    color var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard);
+}
+
+img,
+video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  color: var(--md-sys-color-primary);
+}
+
+::selection {
+  background: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+}
+
+/* Focus indicator — 3dp, secondary color, 2dp offset */
+:focus-visible {
+  outline: 3px solid var(--md-sys-color-secondary);
+  outline-offset: 2px;
+}
+
+.md-visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.md-skip-link {
+  position: absolute;
+  left: 16px;
+  top: -100px;
+  z-index: 100;
+}
+.md-skip-link:focus {
+  top: 12px;
+}
+
+/* ───────────────────────── State layer primitive ───────────────────────── */
+.md-state {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.md-state::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: currentColor;
+  opacity: 0;
+  pointer-events: none;
+  z-index: -1;
+  transition: opacity var(--md-sys-motion-duration-short2) linear;
+}
+.md-state:hover::before { opacity: var(--md-sys-state-hover-opacity); }
+.md-state:focus-visible::before { opacity: var(--md-sys-state-focus-opacity); }
+.md-state:active::before { opacity: var(--md-sys-state-pressed-opacity); }
+
+/* ───────────────────────── Buttons ─────────────────────────
+ * https://m3.material.io/components/buttons/specs
+ */
+.md-button {
+  --_container: transparent;
+  --_label: var(--md-sys-color-primary);
+  --_elevation: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 10px 24px;
+  border: 0;
+  border-radius: var(--md-sys-shape-corner-full);
+  background: var(--_container);
+  color: var(--_label);
+  box-shadow: var(--_elevation);
+  font: 500 14px/20px var(--md-ref-typeface-plain);
+  letter-spacing: 0.1px;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: box-shadow var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
+}
+.md-button svg { width: 18px; height: 18px; flex: none; }
+.md-button--has-icon { padding-inline: 16px 24px; }
+.md-button--has-trailing-icon { padding-inline: 24px 16px; }
+
+.md-button--filled {
+  --_container: var(--md-sys-color-primary);
+  --_label: var(--md-sys-color-on-primary);
+}
+.md-button--filled:hover { --_elevation: var(--md-sys-elevation-level1); }
+
+.md-button--tonal {
+  --_container: var(--md-sys-color-secondary-container);
+  --_label: var(--md-sys-color-on-secondary-container);
+}
+.md-button--tonal:hover { --_elevation: var(--md-sys-elevation-level1); }
+
+.md-button--elevated {
+  --_container: var(--md-sys-color-surface-container-low);
+  --_label: var(--md-sys-color-primary);
+  --_elevation: var(--md-sys-elevation-level1);
+}
+.md-button--elevated:hover { --_elevation: var(--md-sys-elevation-level2); }
+
+.md-button--outlined {
+  --_label: var(--md-sys-color-primary);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  padding-block: 9px;
+}
+
+.md-button--text {
+  --_label: var(--md-sys-color-primary);
+  padding-inline: 12px;
+}
+
+.md-button:disabled,
+.md-button[aria-disabled='true'] {
+  --_container: color-mix(in srgb, var(--md-sys-color-on-surface) 10%, transparent);
+  --_label: color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent);
+  --_elevation: none;
+  pointer-events: none;
+}
+
+/* Icon button — 40dp container, 24dp icon, 48dp touch target */
+.md-icon-button {
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  margin: 4px;
+  border: 0;
+  border-radius: var(--md-sys-shape-corner-full);
+  background: transparent;
+  color: var(--md-sys-color-on-surface-variant);
+  cursor: pointer;
+  overflow: visible;
+}
+.md-icon-button::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+}
+.md-icon-button svg { width: 24px; height: 24px; }
+
+/* ───────────────────────── Cards ─────────────────────────
+ * https://m3.material.io/components/cards/specs
+ */
+.md-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--md-sys-shape-corner-medium);
+  color: var(--md-sys-color-on-surface);
+  overflow: hidden;
+  transition: box-shadow var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
+}
+.md-card--elevated {
+  background: var(--md-sys-color-surface-container-low);
+  box-shadow: var(--md-sys-elevation-level1);
+}
+.md-card--filled {
+  background: var(--md-sys-color-surface-container-highest);
+}
+.md-card--outlined {
+  background: var(--md-sys-color-surface);
+  border: 1px solid var(--md-sys-color-outline-variant);
+}
+a.md-card { text-decoration: none; }
+a.md-card--elevated:hover { box-shadow: var(--md-sys-elevation-level2); }
+a.md-card--filled:hover,
+a.md-card--outlined:hover { box-shadow: var(--md-sys-elevation-level1); }
+.md-card__media {
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  width: 100%;
+  background: var(--md-sys-color-surface-container-high);
+}
+.md-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  flex: 1;
+}
+.md-card__supporting {
+  color: var(--md-sys-color-on-surface-variant);
+  margin: 0;
+}
+.md-card__actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  padding: 0 16px 16px;
+}
+
+/* ───────────────────────── Chips ─────────────────────────
+ * https://m3.material.io/components/chips/specs
+ */
+.md-chip-set { display: flex; flex-wrap: wrap; gap: 8px; }
+.md-chip {
+  display: inline-flex;
+  align-items: center;
+  height: 32px;
+  padding: 0 16px;
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-small);
+  color: var(--md-sys-color-on-surface-variant);
+  font: 500 14px/20px var(--md-ref-typeface-plain);
+  letter-spacing: 0.1px;
+  text-decoration: none;
+}
+.md-chip--selected {
+  background: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+  border-color: transparent;
+}
+
+/* ───────────────────────── Divider ───────────────────────── */
+.md-divider {
+  border: 0;
+  height: 1px;
+  background: var(--md-sys-color-outline-variant);
+  margin: 0;
+}
+
+/* ───────────────────────── Top app bar ─────────────────────────
+ * https://m3.material.io/components/top-app-bar/specs (small, 64dp)
+ */
+.md-top-app-bar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--md-sys-color-surface);
+  color: var(--md-sys-color-on-surface);
+  transition: background-color var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
+}
+.md-top-app-bar[data-scrolled='true'] {
+  background: var(--md-sys-color-surface-container);
+}
+.md-top-app-bar__row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 64px;
+  max-width: var(--md-layout-max);
+  margin: 0 auto;
+  padding: 0 calc(var(--md-layout-margin) - 12px) 0 calc(var(--md-layout-margin) - 4px);
+}
+.md-top-app-bar__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 4px;
+  color: inherit;
+  text-decoration: none;
+  margin-right: auto;
+}
+.md-top-app-bar__logo {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--md-sys-shape-corner-small);
+  object-fit: contain;
+}
+.md-top-app-bar__mark {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  color: var(--md-sys-color-primary);
+}
+.md-top-app-bar__mark svg { width: 32px; height: 32px; }
+.md-top-app-bar__nav {
+  display: none;
+  align-items: center;
+  gap: 4px;
+  margin-right: 8px;
+}
+.md-top-app-bar__cta { display: none; margin: 0 4px; }
+.md-top-app-bar__menu { display: inline-grid; }
+
+@media (min-width: 840px) {
+  .md-top-app-bar__nav { display: flex; }
+  .md-top-app-bar__cta { display: inline-flex; }
+  .md-top-app-bar__menu { display: none; }
+}
+
+/* Nav link with M3 active indicator (pill, secondary-container) */
+.md-nav-link {
+  display: inline-flex;
+  align-items: center;
+  height: 40px;
+  padding: 0 16px;
+  border-radius: var(--md-sys-shape-corner-full);
+  color: var(--md-sys-color-on-surface-variant);
+  font: 500 14px/20px var(--md-ref-typeface-plain);
+  letter-spacing: 0.1px;
+  text-decoration: none;
+}
+.md-nav-link[aria-current='page'] {
+  background: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+}
+
+/* ───────────────────────── Modal navigation drawer ─────────────────────────
+ * https://m3.material.io/components/navigation-drawer/specs
+ */
+.md-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: color-mix(in srgb, var(--md-sys-color-scrim) 32%, transparent);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard);
+}
+.md-scrim[data-open='true'] { opacity: 1; pointer-events: auto; }
+
+.md-drawer {
+  position: fixed;
+  inset: 0 auto 0 0;
+  z-index: 50;
+  width: min(360px, calc(100vw - 56px));
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  background: var(--md-sys-color-surface-container-low);
+  color: var(--md-sys-color-on-surface);
+  border-radius: 0 var(--md-sys-shape-corner-large) var(--md-sys-shape-corner-large) 0;
+  box-shadow: var(--md-sys-elevation-level1);
+  transform: translateX(-105%);
+  visibility: hidden;
+  transition:
+    transform var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-emphasized-accelerate),
+    visibility 0s linear var(--md-sys-motion-duration-medium2);
+}
+.md-drawer[data-open='true'] {
+  transform: none;
+  visibility: visible;
+  transition:
+    transform var(--md-sys-motion-duration-medium4) var(--md-sys-motion-easing-emphasized-decelerate),
+    visibility 0s;
+}
+.md-drawer__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 4px 4px 16px;
+  margin-bottom: 8px;
+  color: var(--md-sys-color-on-surface-variant);
+}
+.md-drawer__item {
+  display: flex;
+  align-items: center;
+  height: 56px;
+  padding: 0 24px 0 16px;
+  border-radius: var(--md-sys-shape-corner-full);
+  color: var(--md-sys-color-on-surface-variant);
+  font: 500 14px/20px var(--md-ref-typeface-plain);
+  letter-spacing: 0.1px;
+  text-decoration: none;
+}
+.md-drawer__item[aria-current='page'] {
+  background: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+}
+.md-drawer__footer {
+  margin-top: auto;
+  padding: 16px;
+}
+
+/* ───────────────────────── Segmented button (theme picker) ─────────────────────────
+ * https://m3.material.io/components/segmented-buttons/specs
+ */
+.md-segmented {
+  display: inline-flex;
+  border: 1px solid var(--md-sys-color-outline);
+  border-radius: var(--md-sys-shape-corner-full);
+  overflow: hidden;
+}
+.md-segmented__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 40px;
+  min-width: 48px;
+  padding: 0 12px;
+  border: 0;
+  background: transparent;
+  color: var(--md-sys-color-on-surface);
+  font: 500 14px/20px var(--md-ref-typeface-plain);
+  cursor: pointer;
+}
+.md-segmented__btn + .md-segmented__btn { border-left: 1px solid var(--md-sys-color-outline); }
+.md-segmented__btn[aria-pressed='true'] {
+  background: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+}
+.md-segmented__btn svg { width: 18px; height: 18px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0ms !important;
+    animation-duration: 0ms !important;
+  }
+}
+
+.md-top-app-bar__name {
+  font: 600 26px/1 var(--md-ref-typeface-brand);
+  letter-spacing: 0.01em;
+}
+
+/* ───────────────────────── Text field (outlined, pill — search-bar shape) ───────────────────────── */
+.md-field {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 56px;
+  padding: 4px 4px 4px 20px;
+  border: 1px solid var(--md-sys-color-outline);
+  border-radius: var(--md-sys-shape-corner-full);
+  background: transparent;
+  color: var(--md-sys-color-on-surface);
+  transition: border-color var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
+}
+.md-field:focus-within {
+  border-color: var(--md-sys-color-primary);
+  box-shadow: inset 0 0 0 1px var(--md-sys-color-primary);
+}
+.md-field > svg { width: 24px; height: 24px; flex: none; color: var(--md-sys-color-on-surface-variant); }
+.md-field input {
+  flex: 1;
+  min-width: 0;
+  height: 46px;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: inherit;
+  font: 400 16px/24px var(--md-ref-typeface-plain);
+  letter-spacing: 0.5px;
+}
+.md-field input::placeholder { color: var(--md-sys-color-on-surface-variant); }
+.md-field .md-button { min-height: 48px; }
