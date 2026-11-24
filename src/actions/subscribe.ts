@@ -15,12 +15,18 @@ export async function subscribe(_prev: SubscribeState, formData: FormData): Prom
   }
 
   const payload = await getPayloadClient()
-  const existing = await payload.count({ collection: 'subscribers', where: { email: { equals: email } } })
-  if (existing.totalDocs > 0) return { status: 'success', message: 'You’re already on the list — cheers!' }
+  const existing = await payload.find({ collection: 'subscribers', where: { email: { equals: email } }, limit: 1 })
+  const current = existing.docs[0]
+  if (current?.status === 'subscribed') return { status: 'success', message: 'You’re already on the list — cheers!' }
+  if (current) {
+    // Previously unsubscribed: re-activate (sends the welcome email again)
+    await payload.update({ collection: 'subscribers', id: current.id, data: { status: 'subscribed' } })
+    return { status: 'success', message: 'Welcome back — check your inbox!' }
+  }
 
   try {
-    await payload.create({ collection: 'subscribers', data: { email, source: String(formData.get('source') ?? 'website') } })
-    return { status: 'success', message: 'Thanks for joining — cheers!' }
+    await payload.create({ collection: 'subscribers', data: { email, status: 'subscribed', source: String(formData.get('source') ?? 'website') } })
+    return { status: 'success', message: 'Thanks for joining — check your inbox!' }
   } catch (err) {
     payload.logger.error({ err }, 'Newsletter sign-up failed')
     return { status: 'error', message: 'Something went wrong. Please try again.' }

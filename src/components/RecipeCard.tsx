@@ -75,7 +75,7 @@ export const RecipeGrid: React.FC<{ recipes: Partial<Recipe>[]; emptyText?: stri
   variant = 'cards',
 }) =>
   recipes.length ? (
-    <div className={variant === 'strip' ? 'recipe-strip' : 'card-grid'}>
+    <div className={variant === 'strip' ? 'recipe-strip' : 'card-grid'} data-animate-children={variant === 'strip' ? 'scale' : ''}>
       {recipes.map((r) => (variant === 'strip' ? <RecipeTile key={r.id} recipe={r} /> : <RecipeCard key={r.id} recipe={r} />))}
     </div>
   ) : (

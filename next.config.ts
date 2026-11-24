@@ -7,6 +7,10 @@ const __filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(__filename)
 
 const nextConfig: NextConfig = {
+  // Markdown twin of every recipe for AI assistants: /recipes/negroni.md
+  async rewrites() {
+    return [{ source: '/recipes/:slug.md', destination: '/md/recipes/:slug' }]
+  },
   images: {
     localPatterns: [
       {

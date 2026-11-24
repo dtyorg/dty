@@ -128,6 +128,11 @@ const home = await upsert('pages', 'home', {
   title: 'Home',
   slug: 'home',
   _status: 'published',
+  meta: {
+    title: 'D3TY — Cocktail, Spirit & Wine Recipes',
+    description:
+      'Discover the art of drinking well: tested cocktail recipes, spirit serves and wine cocktails with exact measures, step-by-step methods and alcohol-free options.',
+  },
   hero: {
     type: 'immersive',
     eyebrow: 'Good drinks. Chill vibes.',
@@ -267,6 +272,20 @@ const privacy = await upsert('pages', 'privacy', {
 
 // ─── Globals ──────────────────────────────────────────────────────────────
 payload.logger.info('Seeding globals…')
+// SEO defaults only — tracking IDs / verification codes are left untouched if already set
+await payload.updateGlobal({
+  slug: 'site-settings',
+  context: ctx,
+  data: {
+    siteName: 'D3TY',
+    titleTemplate: '%s — D3TY',
+    defaultDescription:
+      'Cocktail, spirit and wine recipes with exact measures and step-by-step methods — classics, modern twists and alcohol-free drinks.',
+    locale: 'en_US',
+    organizationName: 'D3TY',
+    defaultImage: img('hero-home'),
+  },
+})
 const pageLink = (id: string, label: string) => ({ link: { type: 'reference' as const, reference: { relationTo: 'pages' as const, value: id }, label } })
 const catLink = (slug: string, label: string) => ({ link: { type: 'reference' as const, reference: { relationTo: 'categories' as const, value: cat[slug] }, label } })
 

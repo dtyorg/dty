@@ -6,12 +6,15 @@ import React from 'react'
 import { Icon } from '@/components/Icon'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { ImmersiveHero } from '@/components/ImmersiveHero'
+import { JsonLd } from '@/components/JsonLd'
+import { TrackEvent } from '@/components/analytics/TrackEvent'
 import { difficultyLabel, RecipeGrid } from '@/components/RecipeCard'
 import { RichText } from '@/components/RichText'
 import type { Category } from '@/payload-types'
 import { getServerSideURL } from '@/utilities/getURL'
-import { docMetadata } from '@/utilities/metadata'
 import { getPayloadClient, getRecipeBySlug, getRecipes } from '@/utilities/queries'
+import { buildMetadata, getSiteSettings } from '@/utilities/seo'
+import { breadcrumbLd, graph, recipeLd } from '@/utilities/structuredData'
 
 type Args = { params: Promise<{ slug: string }> }
 
@@ -32,7 +35,29 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Args): Promise<Metadata> {
   const { slug } = await params
-  return docMetadata(await getRecipeBySlug(decodeURIComponent(slug)), `/recipes/${slug}`)
+  const recipe = await getRecipeBySlug(decodeURIComponent(slug))
+  if (!recipe) return {}
+  const cats = (recipe.categories ?? []).filter((c): c is Category => typeof c === 'object')
+  const section = cats.find((c) => !c.parent)
+  const kind = section?.title === 'Wines' ? 'wine cocktail' : section?.title === 'Spirits' ? 'drink' : 'cocktail'
+  return buildMetadata({
+    title: `${recipe.title} ${kind} recipe`,
+    metaTitle: recipe.meta?.title,
+    description:
+      recipe.meta?.description ||
+      [recipe.description, recipe.ingredients?.length ? `Made with ${recipe.ingredients.slice(0, 3).map((i) => i.name.toLowerCase()).join(', ')}.` : '']
+        .filter(Boolean)
+        .join(' '),
+    path: `/recipes/${recipe.slug}`,
+    images: [recipe.meta?.image, recipe.image],
+    eyebrow: section?.title,
+    type: 'article',
+    publishedTime: recipe.publishedAt,
+    modifiedTime: recipe.updatedAt,
+    section: section?.title,
+    tags: cats.map((c) => c.title),
+    alternateTypes: { 'text/markdown': `/recipes/${recipe.slug}.md` },
+  })
 }
 
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
@@ -60,8 +85,19 @@ export default async function RecipePage({ params }: Args) {
     ? await getRecipes({ categoryId: relatedCat.id, excludeId: recipe.id, limit: 3 })
     : []
 
+  const settings = await getSiteSettings()
+  const path = `/recipes/${recipe.slug}`
+  const crumbs = [
+    { name: 'Home', path: '/' },
+    ...(section ? [{ name: section.title, path: `/categories/${section.slug}` }] : [{ name: 'Recipes', path: '/recipes' }]),
+    ...(relatedCat && relatedCat !== section ? [{ name: relatedCat.title, path: `/categories/${relatedCat.slug}` }] : []),
+    { name: recipe.title, path },
+  ]
+
   return (
     <article>
+      <JsonLd data={graph(recipeLd(recipe, settings), breadcrumbLd(crumbs))} />
+      <TrackEvent event="view_item" params={{ item_id: recipe.slug ?? '', item_name: recipe.title, item_category: section?.title ?? '' }} />
       {draft && <LivePreviewListener serverURL={getServerSideURL()} />}
 
       <ImmersiveHero
@@ -71,7 +107,7 @@ export default async function RecipePage({ params }: Args) {
         title={recipe.title}
       >
         {!!facts.length && (
-          <dl className="recipe-facts">
+          <dl className="recipe-facts hero-in" style={{ '--i': 4 } as React.CSSProperties}>
             {facts.map((f) => (
               <div key={f.label}>
                 <dt className="md-label-medium">{f.label}</dt>
@@ -98,7 +134,7 @@ export default async function RecipePage({ params }: Args) {
       </div>
 
       <div className="container recipe-body">
-        <aside className="md-card md-card--filled recipe-ingredients">
+        <aside className="md-card md-card--filled recipe-ingredients" data-animate>
           <div className="md-card__body">
             <h2 className="md-title-large" style={{ margin: 0 }}>
               Ingredients
@@ -128,9 +164,9 @@ export default async function RecipePage({ params }: Args) {
           <h2 className="md-headline-medium" style={{ marginTop: 0 }}>
             Method
           </h2>
-          <ol className="recipe-steps">
+          <ol className="recipe-steps" data-animate-children>
             {recipe.steps?.map((s, i) => (
-              <li key={s.id}>
+              <li id={`step-${i + 1}`} key={s.id}>
                 <span aria-hidden="true" className="recipe-steps__num md-title-medium">
                   {i + 1}
                 </span>

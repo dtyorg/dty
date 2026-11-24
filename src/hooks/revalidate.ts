@@ -3,6 +3,13 @@ import { revalidatePath, revalidateTag } from 'next/cache'
 
 type Doc = { id: string | number; slug?: string | null; _status?: string | null }
 
+/** Machine-readable feeds that list content: sitemap + LLM files. */
+const revalidateFeeds = () => {
+  revalidatePath('/sitemap.xml')
+  revalidatePath('/llms.txt')
+  revalidatePath('/llms-full.txt')
+}
+
 const pathFor = (prefix: string, doc: Doc) =>
   prefix === '' && doc.slug === 'home' ? '/' : `${prefix}/${doc.slug}`
 
@@ -20,6 +27,7 @@ export const revalidateDoc =
       revalidatePath(pathFor(prefix, previousDoc))
     }
     // Recipe listings (index, category pages, homepage blocks) change when a recipe is (un)published.
+    if (doc._status === 'published' || previousDoc?._status === 'published') revalidateFeeds()
     if (prefix === '/recipes' && (doc._status === 'published' || previousDoc?._status === 'published')) {
       revalidatePath('/recipes')
       revalidatePath('/categories/[slug]', 'page')
@@ -33,6 +41,7 @@ export const revalidateDelete =
   (prefix: '' | '/recipes'): CollectionAfterDeleteHook<Doc> =>
   ({ doc, req: { context } }) => {
     if (!context.disableRevalidate && doc?.slug) {
+      revalidateFeeds()
       revalidatePath(pathFor(prefix, doc))
       if (prefix === '/recipes') {
         revalidatePath('/recipes')
@@ -45,9 +54,13 @@ export const revalidateDelete =
   }
 
 export const revalidateGlobal =
-  (tag: string): GlobalAfterChangeHook =>
+  (tag: string, wholeSite = false): GlobalAfterChangeHook =>
   ({ doc, req: { context } }) => {
-    if (!context.disableRevalidate) revalidateTag(`global_${tag}`, 'max')
+    if (!context.disableRevalidate) {
+      revalidateTag(`global_${tag}`, 'max')
+      // Settings that affect every page's <head> (metadata, tracking) rebuild all routes
+      if (wholeSite) revalidatePath('/', 'layout')
+    }
     return doc
   }
 
@@ -58,6 +71,7 @@ export const revalidateCategory: CollectionAfterChangeHook<Doc> = ({ doc, req: {
     revalidatePath('/[slug]', 'page')
     revalidatePath('/')
     revalidateTag('categories', 'max')
+    revalidateFeeds()
   }
   return doc
 }

@@ -1,13 +1,15 @@
 import Link from 'next/link'
 import React from 'react'
 import { getGlobal } from '@/utilities/queries'
+import { CookieSettingsButton } from './analytics/CookieSettingsButton'
 import { CMSLink } from './CMSLink'
 import { Icon } from './Icon'
 import { SocialIcon } from './SocialIcon'
 import { ThemeSegmented } from './ThemeSwitcher'
 
 export async function Footer() {
-  const [footer, header] = await Promise.all([getGlobal('footer'), getGlobal('header')])
+  const [footer, header, settings] = await Promise.all([getGlobal('footer'), getGlobal('header'), getGlobal('site-settings')])
+  const hasTracking = Boolean(settings.ga4Id || settings.gtmId || settings.metaPixelId || settings.bingUetId || settings.clarityId)
   return (
     <footer className="site-footer">
       <div className="container site-footer__row">
@@ -20,6 +22,7 @@ export async function Footer() {
             {footer.links.map(({ link, id }) => (
               <CMSLink appearance="plain" key={id} link={link} />
             ))}
+            {hasTracking && settings.requireConsent !== false && <CookieSettingsButton />}
           </nav>
         )}
         {!!footer.socials?.length && (

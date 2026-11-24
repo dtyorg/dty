@@ -5,8 +5,10 @@ import React from 'react'
 
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
+import { Motion } from '@/components/Motion'
+import { Analytics } from '@/components/analytics/Analytics'
 import { themeInitScript } from '@/providers/Theme'
-import { getServerSideURL } from '@/utilities/getURL'
+import { getSiteSettings, rootMetadata } from '@/utilities/seo'
 
 import './theme/tokens.css'
 import './theme/m3.css'
@@ -26,11 +28,7 @@ const cormorant = Cormorant_Garamond({
   variable: '--font-brand',
 })
 
-export const metadata: Metadata = {
-  metadataBase: new URL(getServerSideURL()),
-  title: { default: 'D3TY', template: '%s — D3TY' },
-  description: 'Built with Payload CMS, Next.js and Material Design 3.',
-}
+export const generateMetadata = (): Promise<Metadata> => rootMetadata()
 
 export const viewport: Viewport = {
   themeColor: [
@@ -41,9 +39,10 @@ export const viewport: Viewport = {
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const { isEnabled: isDraft } = await draftMode()
+  const settings = await getSiteSettings()
 
   return (
-    <html className={`${roboto.variable} ${cormorant.variable}`} lang="en" suppressHydrationWarning>
+    <html className={`${roboto.variable} ${cormorant.variable}`} lang={(settings.locale || 'en_US').split('_')[0]} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
@@ -65,6 +64,17 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           </main>
           <Footer />
         </div>
+        <Motion />
+        {!isDraft && (
+          <Analytics
+            bingUetId={settings.bingUetId}
+            clarityId={settings.clarityId}
+            ga4Id={settings.ga4Id}
+            gtmId={settings.gtmId}
+            metaPixelId={settings.metaPixelId}
+            requireConsent={settings.requireConsent !== false}
+          />
+        )}
       </body>
     </html>
   )

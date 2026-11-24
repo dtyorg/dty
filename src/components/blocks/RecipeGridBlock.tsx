@@ -24,7 +24,7 @@ export async function RecipeGridBlock({ heading, intro, source, category, recipe
   return (
     <section className="section">
       <div className="container">
-        <div className="section-head">
+        <div className="section-head" data-animate>
           <div>
             {heading && <h2 className="section-heading md-headline-large">{heading}</h2>}
             {intro && <p className="section-intro md-body-large">{intro}</p>}

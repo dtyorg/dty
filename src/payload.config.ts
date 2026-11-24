@@ -14,7 +14,9 @@ import { Recipes } from './collections/Recipes'
 import { Subscribers } from './collections/Subscribers'
 import { Users } from './collections/Users'
 import { Footer } from './globals/Footer'
+import { getEmailAdapter } from './email/adapter'
 import { Header } from './globals/Header'
+import { SiteSettings } from './globals/SiteSettings'
 import { getServerSideURL } from './utilities/getURL'
 
 const filename = fileURLToPath(import.meta.url)
@@ -35,8 +37,9 @@ export default buildConfig({
     },
   },
   collections: [Recipes, Categories, Pages, Media, Subscribers, Users],
-  globals: [Header, Footer],
+  globals: [Header, Footer, SiteSettings],
   editor: lexicalEditor(),
+  email: getEmailAdapter(),
   secret: process.env.PAYLOAD_SECRET || '',
   cors: [getServerSideURL()].filter(Boolean),
   typescript: { outputFile: path.resolve(dirname, 'payload-types.ts') },
@@ -44,12 +47,14 @@ export default buildConfig({
   sharp,
   plugins: [
     seoPlugin({
-      collections: ['pages', 'recipes'],
+      collections: ['pages', 'recipes', 'categories'],
       uploadsCollection: 'media',
       tabbedUI: true,
       generateTitle: ({ doc }) => (doc?.title ? `${doc.title} — D3TY` : 'D3TY'),
+      generateDescription: ({ doc }) => (doc?.description || doc?.hero?.subhead || '').slice(0, 160),
+      generateImage: ({ doc }) => doc?.image || doc?.hero?.media || undefined,
       generateURL: ({ doc, collectionSlug }) =>
-        `${getServerSideURL()}${collectionSlug === 'recipes' ? '/recipes' : ''}/${doc?.slug === 'home' ? '' : (doc?.slug ?? '')}`,
+        `${getServerSideURL()}${collectionSlug === 'recipes' ? '/recipes' : collectionSlug === 'categories' ? '/categories' : ''}/${doc?.slug === 'home' ? '' : (doc?.slug ?? '')}`,
     }),
     // Vercel's filesystem is read-only — store uploads in Vercel Blob when a token is present.
     vercelBlobStorage({

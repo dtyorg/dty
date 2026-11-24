@@ -1,12 +1,17 @@
 'use client'
 
-import React, { useActionState } from 'react'
+import React, { useActionState, useEffect } from 'react'
 import { subscribe, type SubscribeState } from '@/actions/subscribe'
+import { track } from '../analytics/track'
 import { Icon } from '../Icon'
 
 export const NewsletterForm: React.FC<{ buttonLabel: string; source: string }> = ({ buttonLabel, source }) => {
   const [state, action, pending] = useActionState<SubscribeState, FormData>(subscribe, { status: 'idle', message: '' })
   const done = state.status === 'success'
+
+  useEffect(() => {
+    if (done) track('sign_up', { method: 'newsletter', source })
+  }, [done, source])
 
   return (
     <form action={action} className="newsletter__form" noValidate>

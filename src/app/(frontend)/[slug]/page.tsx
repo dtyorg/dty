@@ -3,7 +3,9 @@ import { draftMode } from 'next/headers'
 import { notFound, redirect } from 'next/navigation'
 import React from 'react'
 import { PageView } from '@/components/PageView'
-import { docMetadata } from '@/utilities/metadata'
+import { JsonLd } from '@/components/JsonLd'
+import { pageMetadata } from '@/utilities/metadata'
+import { breadcrumbLd, graph, webPageLd } from '@/utilities/structuredData'
 import { getPageBySlug, getPayloadClient } from '@/utilities/queries'
 
 type Args = { params: Promise<{ slug: string }> }
@@ -27,7 +29,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Args): Promise<Metadata> {
   const { slug } = await params
-  return docMetadata(await getPageBySlug(decodeURIComponent(slug)), `/${slug}`)
+  return pageMetadata(await getPageBySlug(decodeURIComponent(slug)), `/${slug}`)
 }
 
 export default async function Page({ params }: Args) {
@@ -36,5 +38,16 @@ export default async function Page({ params }: Args) {
   const { isEnabled: draft } = await draftMode()
   const page = await getPageBySlug(decodeURIComponent(slug))
   if (!page) notFound()
-  return <PageView draft={draft} page={page} />
+  const path = `/${page.slug}`
+  return (
+    <>
+      <JsonLd
+        data={graph(
+          webPageLd({ name: page.title, path, description: page.meta?.description || page.hero?.subhead, type: page.slug === 'about' ? 'AboutPage' : 'WebPage' }),
+          breadcrumbLd([{ name: 'Home', path: '/' }, { name: page.title, path }]),
+        )}
+      />
+      <PageView draft={draft} page={page} />
+    </>
+  )
 }
