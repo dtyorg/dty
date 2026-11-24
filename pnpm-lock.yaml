@@ -11,6 +11,12 @@ importers:
       '@payloadcms/db-mongodb':
         specifier: 3.94.0
         version: 3.94.0(payload@3.94.0(graphql@16.15.0)(typescript@5.7.3))
+      '@payloadcms/email-nodemailer':
+        specifier: 3.94.0
+        version: 3.94.0(payload@3.94.0(graphql@16.15.0)(typescript@5.7.3))
+      '@payloadcms/email-resend':
+        specifier: 3.94.0
+        version: 3.94.0(payload@3.94.0(graphql@16.15.0)(typescript@5.7.3))
       '@payloadcms/live-preview-react':
         specifier: 3.94.0
         version: 3.94.0(react-dom@19.2.9(react@19.2.9))(react@19.2.9)
@@ -38,6 +44,9 @@ importers:
       graphql:
         specifier: ^16.8.1
         version: 16.15.0
+      gsap:
+        specifier: 3.15.1
+        version: 3.15.1
       next:
         specifier: 16.4.6
         version: 16.4.6(@babel/core@7.29.13)(@playwright/test@1.63.0)(@types/node@22.19.9)(react-dom@19.2.9(react@19.2.9))(react@19.2.9)(sass@1.77.4)
@@ -1224,6 +1233,18 @@ packages:
 
   '@payloadcms/db-mongodb@3.94.0':
     resolution: {integrity: sha512-/8Xzi7eSud9MR2yzdYWqICv9KTWsR7VCnoEsSJQDnm7MRPZP6qKkD9q5dxBu8pubRFBw1pJPCBT1hE598uZk3g==}
+    peerDependencies:
+      payload: 3.94.0
+
+  '@payloadcms/email-nodemailer@3.94.0':
+    resolution: {integrity: sha512-hBxCAaqKkZPdCLLtJXJPFX2LJz7/frrQ6dQPKkz3dipzEhPdHNKMKYwMvP+a1e8ZtRhM3IWPfEUzbFEbP+AQ6g==}
+    engines: {node: ^22.23.5 || ^24.22.3 || >=26.13.1}
+    peerDependencies:
+      payload: 3.94.0
+
+  '@payloadcms/email-resend@3.94.0':
+    resolution: {integrity: sha512-NhjS0WvtvTj50RHBfFRxBilSNTD71wswZ/DGndLD1WeqtkCzfWfW18YvmzGV3+KgEsXJTWm2Nh5uK/yfAvco/g==}
+    engines: {node: ^22.23.5 || ^24.22.3 || >=26.13.1}
     peerDependencies:
       payload: 3.94.0
 
@@ -2579,6 +2600,9 @@ packages:
     resolution: {integrity: sha512-32kz9FecohDiC/tgcViwnRXM7HFBVTPiW7pHO+DikKOI5KjhU/jNULOReXsrFqt2WAYbE9xFXsTffJw6iTO8qw==}
     engines: {node: ^12.22.0 || ^14.16.0 || ^16.0.0 || >=17.0.0}
 
+  gsap@3.15.1:
+    resolution: {integrity: sha512-63yjWRFWj3QRP1UOuD8kcidCcy3nxb1mMRpwHr/xJRvPfm9GtWOXFAYUiL0ro1fgPq2nY53LR+98pAgy9BumBg==}
+
   happy-dom@20.14.6:
     resolution: {integrity: sha512-5DDsf4QmEIlRL6NkCv/fxSjYHHkZceL/IaYQdJc2h3G7DRTEai++VTjbfL0LB9geW2VrA3+vrjF3Efx+OTtX0Q==}
     engines: {node: '>=20.0.0'}
@@ -3205,6 +3229,10 @@ packages:
   node-releases@2.0.65:
     resolution: {integrity: sha512-PfvofsGQ+MiOQIPkX9fU8ELUWmy5zL74CdQaph/ismKszfFkfwXaw0cGiwbwym2hT9k5+mdyl8O5WQ1MD8EHmA==}
     engines: {node: '>=18'}
+
+  nodemailer@10.6.0:
+    resolution: {integrity: sha512-jWanL7D9GD3jvUDYKmoC5rWTiG8MnBgnN2yV68bgMKip1zUJhiSTyz7Eg+18y8sk5OvdVDzws5nZK5arSI4f5Q==}
+    engines: {node: '>=20.0.0'}
 
   normalize-path@3.0.0:
     resolution: {integrity: sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA==}
@@ -5163,6 +5191,15 @@ snapshots:
       - socks
       - supports-color
 
+  '@payloadcms/email-nodemailer@3.94.0(payload@3.94.0(graphql@16.15.0)(typescript@5.7.3))':
+    dependencies:
+      nodemailer: 10.6.0
+      payload: 3.94.0(graphql@16.15.0)(typescript@5.7.3)
+
+  '@payloadcms/email-resend@3.94.0(payload@3.94.0(graphql@16.15.0)(typescript@5.7.3))':
+    dependencies:
+      payload: 3.94.0(graphql@16.15.0)(typescript@5.7.3)
+
   '@payloadcms/graphql@3.94.0(graphql@16.15.0)(payload@3.94.0(graphql@16.15.0)(typescript@5.7.3))(typescript@5.7.3)':
     dependencies:
       graphql: 16.15.0
@@ -6754,6 +6791,8 @@ snapshots:
 
   graphql@16.15.0: {}
 
+  gsap@3.15.1: {}
+
   happy-dom@20.14.6:
     dependencies:
       '@types/node': 22.19.9
@@ -7511,6 +7550,8 @@ snapshots:
       semver: 6.3.2
 
   node-releases@2.0.65: {}
+
+  nodemailer@10.6.0: {}
 
   normalize-path@3.0.0: {}
 

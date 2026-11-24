@@ -102,10 +102,12 @@ export interface Config {
   globals: {
     header: Header;
     footer: Footer;
+    'site-settings': SiteSetting;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
+    'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
   };
   locale: null;
   widgets: {
@@ -344,6 +346,14 @@ export interface Category {
     docs?: (string | Recipe)[];
     hasNextPage?: boolean;
     totalDocs?: number;
+  };
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (string | null) | Media;
   };
   updatedAt: string;
   createdAt: string;
@@ -632,7 +642,9 @@ export interface MediaBlock {
 export interface Subscriber {
   id: string;
   email: string;
+  status: 'subscribed' | 'unsubscribed';
   source?: string | null;
+  token?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -836,6 +848,13 @@ export interface CategoriesSelect<T extends boolean = true> {
             };
       };
   recipes?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1091,7 +1110,9 @@ export interface MediaSelect<T extends boolean = true> {
  */
 export interface SubscribersSelect<T extends boolean = true> {
   email?: T;
+  status?: T;
   source?: T;
+  token?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1263,6 +1284,79 @@ export interface Footer {
   createdAt?: string | null;
 }
 /**
+ * SEO defaults, search-engine verification and analytics / tracking pixels.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings".
+ */
+export interface SiteSetting {
+  id: string;
+  siteName: string;
+  /**
+   * “%s” is replaced by the page title.
+   */
+  titleTemplate?: string | null;
+  /**
+   * Used when a page has no meta description (aim for 120–160 characters).
+   */
+  defaultDescription?: string | null;
+  /**
+   * Default social share image (1200×630). If empty, a branded image is generated.
+   */
+  defaultImage?: (string | null) | Media;
+  locale?: string | null;
+  twitterHandle?: string | null;
+  /**
+   * Use on staging / before launch. Sets noindex and blocks crawling in robots.txt.
+   */
+  noindex?: boolean | null;
+  /**
+   * Defaults to the site name.
+   */
+  organizationName?: string | null;
+  /**
+   * Square logo, at least 112×112.
+   */
+  logo?: (string | null) | Media;
+  contactEmail?: string | null;
+  googleVerification?: string | null;
+  bingVerification?: string | null;
+  facebookDomainVerification?: string | null;
+  /**
+   * Required for visitors from the EU/UK (GDPR). Recommended to keep on.
+   */
+  requireConsent?: boolean | null;
+  ga4Id?: string | null;
+  /**
+   * Optional. Use GA4 or GTM, not both for the same GA property.
+   */
+  gtmId?: string | null;
+  metaPixelId?: string | null;
+  bingUetId?: string | null;
+  /**
+   * Free heatmaps & session recordings from Microsoft.
+   */
+  clarityId?: string | null;
+  /**
+   * OAI-SearchBot, ChatGPT-User, Claude-SearchBot, Claude-User, PerplexityBot, Perplexity-User. Recommended: on.
+   */
+  allowAiSearch?: boolean | null;
+  /**
+   * GPTBot, ClaudeBot, Google-Extended, Applebot-Extended, CCBot, Meta-ExternalAgent. Turn off to opt out of training while staying visible in AI search.
+   */
+  allowAiTraining?: boolean | null;
+  /**
+   * Short introduction shown at the top of /llms.txt (what the site is and who it is for).
+   */
+  llmsSummary?: string | null;
+  /**
+   * Optional extra guidance for AI assistants (e.g. measurement conventions, how to attribute).
+   */
+  llmsNotes?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header_select".
  */
@@ -1330,6 +1424,38 @@ export interface FooterSelect<T extends boolean = true> {
       };
   legal?: T;
   copyright?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings_select".
+ */
+export interface SiteSettingsSelect<T extends boolean = true> {
+  siteName?: T;
+  titleTemplate?: T;
+  defaultDescription?: T;
+  defaultImage?: T;
+  locale?: T;
+  twitterHandle?: T;
+  noindex?: T;
+  organizationName?: T;
+  logo?: T;
+  contactEmail?: T;
+  googleVerification?: T;
+  bingVerification?: T;
+  facebookDomainVerification?: T;
+  requireConsent?: T;
+  ga4Id?: T;
+  gtmId?: T;
+  metaPixelId?: T;
+  bingUetId?: T;
+  clarityId?: T;
+  allowAiSearch?: T;
+  allowAiTraining?: T;
+  llmsSummary?: T;
+  llmsNotes?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

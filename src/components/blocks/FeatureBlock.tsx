@@ -14,7 +14,7 @@ type FeatureProps = {
 }
 
 export const Feature: React.FC<FeatureProps> = ({ eyebrow, heading, body, image, imagePosition, link }) => (
-  <div className={`feature md-card md-card--outlined${imagePosition === 'end' ? ' feature--reverse' : ''}`}>
+  <div className={`feature md-card md-card--outlined${imagePosition === 'end' ? ' feature--reverse' : ''}`} data-animate="scale">
     {image ? <Media className="feature__img" resource={image} size="card" sizes="(max-width: 840px) 100vw, 50vw" /> : <ImagePlaceholder className="feature__img" />}
     <div className="feature__body">
       {eyebrow && <p className="md-overline feature__eyebrow">{eyebrow}</p>}

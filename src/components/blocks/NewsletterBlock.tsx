@@ -6,7 +6,7 @@ import { NewsletterForm } from './NewsletterForm'
 export const NewsletterBlock: React.FC<Props> = ({ heading, body, buttonLabel }) => (
   <section className="section">
     <div className="container">
-      <div className="newsletter">
+      <div className="newsletter" data-animate>
         <span aria-hidden="true" className="newsletter__icon">
           <Icon name="mail" />
         </span>

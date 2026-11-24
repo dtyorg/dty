@@ -1,10 +1,11 @@
 import type { Metadata } from 'next'
 import React from 'react'
+import { TrackEvent } from '@/components/analytics/TrackEvent'
 import { Icon } from '@/components/Icon'
 import { RecipeGrid } from '@/components/RecipeCard'
 import { getRecipes } from '@/utilities/queries'
 
-export const metadata: Metadata = { title: 'Search', robots: { index: false } }
+export const metadata: Metadata = { title: 'Search recipes', robots: { index: false, follow: true } }
 
 type Args = { searchParams: Promise<{ q?: string }> }
 
@@ -30,6 +31,7 @@ export default async function SearchPage({ searchParams }: Args) {
           </form>
         </div>
       </section>
+      {q && <TrackEvent event="search" params={{ search_term: q, results: results.length }} />}
       {q && (
         <section className="section" style={{ paddingTop: 0 }}>
           <div className="container">

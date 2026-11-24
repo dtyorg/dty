@@ -17,7 +17,7 @@ export async function CategoryChips({ section, active }: { section?: Category | 
   const allActive = section ? active === section.slug : active === 'all'
 
   return (
-    <nav aria-label="Filter recipes" className="md-chip-set chip-row">
+    <nav aria-label="Filter recipes" className="md-chip-set chip-row" data-animate-children>
       <Link aria-current={allActive ? 'page' : undefined} className={`md-chip md-chip--pill md-state${allActive ? ' md-chip--selected' : ''}`} href={allHref}>
         All
       </Link>

@@ -757,3 +757,76 @@
 
 /* ── Search ───────────────────────── */
 .search-form { margin-top: 32px; }
+
+/* ── Motion ─────────────────────────
+ * Above-the-fold intros are pure CSS (instant, no JS). Scroll reveals & parallax are GSAP
+ * (components/Motion.tsx), loaded on idle. Everything animates transform/opacity only.
+ */
+@keyframes md-enter {
+  from { opacity: 0; transform: translate3d(0, 20px, 0); }
+}
+@keyframes md-settle {
+  from { transform: scale(1.08); }
+}
+.immersive__content > *,
+.hero .container > div > *,
+.hero .container > .hero__panel > div > *,
+.hero-in {
+  animation: md-enter 0.9s var(--md-sys-motion-easing-emphasized-decelerate) both;
+  animation-delay: calc(var(--i, 0) * 90ms);
+}
+.immersive__content > :nth-child(2),
+.hero .container > div > :nth-child(2) { --i: 1; }
+.immersive__content > :nth-child(3),
+.hero .container > div > :nth-child(3) { --i: 2; }
+.immersive__content > :nth-child(4),
+.hero .container > div > :nth-child(4) { --i: 3; }
+.immersive__content > :nth-child(5) { --i: 4; }
+
+/* Image wrapper overhangs so the parallax translate never reveals an edge */
+.immersive__media {
+  position: absolute;
+  inset: -6% 0 -12%;
+  z-index: -2;
+}
+@media (min-width: 840px) and (prefers-reduced-motion: no-preference) {
+  .immersive__media { will-change: transform; } /* parallax layer, desktop only */
+}
+.immersive__media .immersive__img {
+  position: absolute;
+  inset: 0;
+  z-index: auto;
+  animation: md-settle 1.8s var(--md-sys-motion-easing-emphasized-decelerate) both;
+}
+
+/* ── Cookie consent (M3 snackbar-style, fixed → no layout shift) ───────────────────────── */
+.consent {
+  position: fixed;
+  z-index: 60;
+  left: 16px;
+  right: 16px;
+  bottom: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  max-width: 640px;
+  margin-inline: auto;
+  padding: 12px 12px 12px 20px;
+  border-radius: var(--md-sys-shape-corner-large);
+  background: var(--md-sys-color-surface-container-high);
+  box-shadow: var(--md-sys-elevation-level3);
+  animation: md-enter 0.5s var(--md-sys-motion-easing-emphasized-decelerate) both;
+}
+.consent__text { margin: 0; flex: 1 1 280px; }
+.consent__text a { color: var(--md-sys-color-primary); }
+.consent__actions { display: flex; gap: 8px; margin-left: auto; }
+.link-button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+}
+.link-button:hover { color: var(--md-sys-color-primary); text-decoration: underline; text-underline-offset: 4px; }

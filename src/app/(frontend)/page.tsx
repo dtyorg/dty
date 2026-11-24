@@ -3,11 +3,14 @@ import { draftMode } from 'next/headers'
 import Link from 'next/link'
 import React from 'react'
 import { PageView } from '@/components/PageView'
-import { docMetadata } from '@/utilities/metadata'
-import { getPageBySlug } from '@/utilities/queries'
+import { JsonLd } from '@/components/JsonLd'
+import { pageMetadata } from '@/utilities/metadata'
+import { getSiteSettings } from '@/utilities/seo'
+import { graph, organizationLd, webPageLd, websiteLd } from '@/utilities/structuredData'
+import { getGlobal, getPageBySlug } from '@/utilities/queries'
 
 export async function generateMetadata(): Promise<Metadata> {
-  return docMetadata(await getPageBySlug('home'), '/')
+  return pageMetadata(await getPageBySlug('home'), '/')
 }
 
 export default async function HomePage() {
@@ -34,5 +37,17 @@ export default async function HomePage() {
     )
   }
 
-  return <PageView draft={draft} page={page} />
+  const [settings, footer] = await Promise.all([getSiteSettings(), getGlobal('footer')])
+  return (
+    <>
+      <JsonLd
+        data={graph(
+          organizationLd(settings, footer),
+          websiteLd(settings),
+          webPageLd({ name: page.meta?.title || settings.siteName, path: '/', description: page.meta?.description || page.hero?.subhead }),
+        )}
+      />
+      <PageView draft={draft} page={page} />
+    </>
+  )
 }

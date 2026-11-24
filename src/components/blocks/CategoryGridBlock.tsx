@@ -17,9 +17,9 @@ export async function CategoryGridBlock({ heading, intro, categories, style }: P
     return (
       <section className="section">
         <div className="container">
-          {heading && <h2 className="section-heading md-headline-large">{heading}</h2>}
+          {heading && <h2 className="section-heading md-headline-large" data-animate>{heading}</h2>}
           {intro && <p className="section-intro md-body-large">{intro}</p>}
-          <div className="category-grid">
+          <div className="category-grid" data-animate-children>
             {list.map((c) => (
               <Link className="category-tile md-state" href={`/categories/${c.slug}`} key={c.id}>
                 <span aria-hidden="true" className="category-tile__mark">
@@ -42,9 +42,9 @@ export async function CategoryGridBlock({ heading, intro, categories, style }: P
   return (
     <section className="section">
       <div className="container">
-        {heading && <h2 className="section-heading section-heading--rule md-headline-large">{heading}</h2>}
+        {heading && <h2 className="section-heading section-heading--rule md-headline-large" data-animate>{heading}</h2>}
         {intro && <p className="section-intro section-intro--center md-body-large">{intro}</p>}
-        <div className="world-grid">
+        <div className="world-grid" data-animate-children="scale">
           {list.map((c) => (
             <Link className="world-tile md-theme-dark md-state" href={`/categories/${c.slug}`} key={c.id}>
               {c.image ? (

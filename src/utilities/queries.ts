@@ -6,11 +6,17 @@ import { cache } from 'react'
 
 export const getPayloadClient = () => getPayload({ config: configPromise })
 
-export const getGlobal = <T extends 'header' | 'footer'>(slug: T, depth = 1) =>
+export const getGlobal = <T extends 'header' | 'footer' | 'site-settings'>(slug: T, depth = 1) =>
   unstable_cache(
     async () => {
       const payload = await getPayloadClient()
-      return payload.findGlobal({ slug, depth })
+      // Links only need slug + title: keeps every page's HTML/RSC payload small
+      const linkFields = { slug: true, title: true } as const
+      return payload.findGlobal({
+        slug,
+        depth,
+        populate: { pages: linkFields, recipes: linkFields, categories: linkFields },
+      })
     },
     [`global_${slug}`],
     { tags: [`global_${slug}`] },

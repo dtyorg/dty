@@ -5,7 +5,7 @@ import { CMSLink } from '../CMSLink'
 export const CallToActionBlock: React.FC<Props> = ({ heading, body, links }) => (
   <section className="section">
     <div className="container">
-      <div className="cta">
+      <div className="cta" data-animate="scale">
         <div>
           <h2 className="md-headline-medium">{heading}</h2>
           {body && <p className="md-body-large">{body}</p>}

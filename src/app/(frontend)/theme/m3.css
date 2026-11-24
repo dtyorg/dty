@@ -525,6 +525,7 @@ a.md-card--outlined:hover { box-shadow: var(--md-sys-elevation-level1); }
   *::after {
     transition-duration: 0ms !important;
     animation-duration: 0ms !important;
+    animation-delay: 0ms !important;
   }
 }
 

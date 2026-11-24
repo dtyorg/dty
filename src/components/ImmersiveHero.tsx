@@ -20,7 +20,11 @@ export const ImmersiveHero: React.FC<Props> = ({ eyebrow, title, subhead, image,
   const hasImage = !!image && typeof image === 'object'
   return (
     <section className={`immersive md-theme-dark immersive--${size}${hasImage ? ' immersive--with-image' : ''}`}>
-      {hasImage && <Media className="immersive__img" priority resource={image} size="hero" sizes="100vw" />}
+      {hasImage && (
+        <div className="immersive__media" data-parallax>
+          <Media className="immersive__img" priority resource={image} size="hero" sizes="100vw" />
+        </div>
+      )}
       <div className="immersive__scrim" />
       <div className="container immersive__content">
         {eyebrow && <p className="immersive__eyebrow md-overline">{eyebrow}</p>}
